@@ -1,0 +1,38 @@
+from queue import PriorityQueue
+
+def busqueda_costo_uniforme(graph, start, goal):
+    # Creamos una cola de prioridad para almacenar los nodos a explorar
+    frontier = PriorityQueue()
+    # Inicializamos la cola con el nodo de inicio y su costo acumulado
+    frontier.put((0, start))
+    
+    # Diccionario para almacenar los costos acumulados de llegar a cada nodo
+    costo_acumulado = {start: 0}
+    
+    while not frontier.empty():
+        # Obtenemos el nodo con el menor costo acumulado de la cola
+        costo, nodo_actual = frontier.get()
+        
+        # Verificamos si hemos llegado al nodo objetivo
+        if nodo_actual == goal:
+            print("¡Objetivo alcanzado!")
+            break
+        
+        # Exploramos los nodos vecinos del nodo actual
+        for vecino, costo_arista in graph[nodo_actual].items():
+            nuevo_costo = costo_acumulado[nodo_actual] + costo_arista
+            
+            # Si el vecino no ha sido visitado o el nuevo costo es menor
+            if vecino not in costo_acumulado or nuevo_costo < costo_acumulado[vecino]:
+                costo_acumulado[vecino] = nuevo_costo
+                frontier.put((nuevo_costo, vecino))
+    
+# Ejemplo de uso
+grafo = {
+    'A': {'B': 1, 'C': 4},
+    'B': {'A': 1, 'D': 2},
+    'C': {'A': 4, 'D': 5},
+    'D': {'B': 2, 'C': 5}
+}
+
+busqueda_costo_uniforme(grafo, 'A', 'D')
