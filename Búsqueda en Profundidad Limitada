@@ -1,0 +1,37 @@
+def busqueda_profundidad_limitada(grafo, objetivo, profundidad_limite, nodo_inicial=None):
+    if nodo_inicial is None:
+        nodo_inicial = list(grafo.keys())[0]  # Tomamos el primer nodo si no se proporciona uno
+
+    return buscar(grafo, objetivo, profundidad_limite, nodo_inicial, 0)
+
+def buscar(grafo, objetivo, profundidad_limite, nodo_actual, profundidad_actual):
+    print(f'Visitando nodo: {nodo_actual}')
+
+    if nodo_actual == objetivo:
+        return True  # Hemos encontrado el objetivo
+
+    if profundidad_actual == profundidad_limite:
+        return False  # Límite de profundidad alcanzado, no podemos ir más profundo
+
+    for vecino in grafo.get(nodo_actual, []):
+        if buscar(grafo, objetivo, profundidad_limite, vecino, profundidad_actual + 1):
+            return True  # Hemos encontrado el objetivo en el subárbol
+
+    return False  # El objetivo no se encuentra en este subárbol
+
+# Ejemplo de uso
+arbol = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': ['G'],
+    'E': [],
+    'F': [],
+    'G': []
+}
+
+objetivo_buscado = 'G'
+profundidad_limite = 3
+
+resultado = busqueda_profundidad_limitada(arbol, objetivo_buscado, profundidad_limite)
+print(f'¿Se encontró el objetivo? {resultado}')
