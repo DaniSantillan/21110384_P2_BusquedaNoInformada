@@ -1,0 +1,39 @@
+def busqueda_profundidad_iterativa(grafo, inicio, objetivo):
+    for profundidad_maxima in range(1, len(grafo)):
+        resultado = busqueda_profundidad_limitada(grafo, inicio, objetivo, profundidad_maxima)
+        if resultado is not None:
+            return resultado
+    return None
+
+def busqueda_profundidad_limitada(grafo, nodo, objetivo, profundidad_maxima):
+    pila = [(nodo, [nodo])]
+    
+    while pila:
+        actual, camino = pila.pop()
+        
+        if actual == objetivo:
+            return camino
+        
+        if len(camino) < profundidad_maxima:
+            vecinos = grafo.get(actual, [])
+            for vecino in vecinos:
+                if vecino not in camino:
+                    pila.append((vecino, camino + [vecino]))
+    
+    return None
+
+# Ejemplo de uso
+grafo_ejemplo = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': ['F'],
+    'F': []
+}
+
+inicio = 'A'
+objetivo = 'F'
+resultado = busqueda_profundidad_iterativa(grafo_ejemplo, inicio, objetivo)
+
+print(f"Camino de {inicio} a {objetivo}: {resultado}")
