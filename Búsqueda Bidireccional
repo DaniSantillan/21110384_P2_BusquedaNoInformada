@@ -1,0 +1,51 @@
+from collections import defaultdict, deque
+
+def bidirectional_bfs(graph, start, goal):
+    forward_queue = deque([(start, [start])])
+    backward_queue = deque([(goal, [goal])])
+    visited_forward = set([start])
+    visited_backward = set([goal])
+
+    while forward_queue and backward_queue:
+
+        current_forward, path_forward = forward_queue.popleft()
+        for neighbor in graph[current_forward]:
+            if neighbor not in visited_forward:
+                visited_forward.add(neighbor)
+                forward_queue.append((neighbor, path_forward + [neighbor]))
+
+                if neighbor in visited_backward:
+                    return path_forward + path_backward[::-1]
+
+        current_backward, path_backward = backward_queue.popleft()
+        for neighbor in graph[current_backward]:
+            if neighbor not in visited_backward:
+                visited_backward.add(neighbor)
+                backward_queue.append((neighbor, path_backward + [neighbor]))
+
+                if neighbor in visited_forward:
+                    return path_forward + path_backward[::-1]
+
+    return None  
+
+# Ejemplo de uso
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D', 'E'],
+    'C': ['A', 'F', 'G'],
+    'D': ['B'],
+    'E': ['B', 'H'],
+    'F': ['C'],
+    'G': ['C'],
+    'H': ['E']
+}
+
+start_node = 'A'
+goal_node = 'H'
+
+result = bidirectional_bfs(graph, start_node, goal_node)
+
+if result:
+    print(f"Path from {start_node} to {goal_node}: {result}")
+else:
+    print(f"No path from {start_node} to {goal_node}")
