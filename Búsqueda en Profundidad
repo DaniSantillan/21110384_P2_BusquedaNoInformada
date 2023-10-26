@@ -1,0 +1,22 @@
+def dfs(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    print(start)  # Puedes modificar esto para almacenar o procesar los nodos de alguna manera
+
+    for neighbor in graph[start] - visited:
+        dfs(graph, neighbor, visited)
+
+# Ejemplo de uso:
+# Supongamos que tenemos un grafo representado como un diccionario de conjuntos
+graph = {
+    'A': {'B', 'C'},
+    'B': {'A', 'D', 'E'},
+    'C': {'A', 'F', 'G'},
+    'D': {'B'},
+    'E': {'B'},
+    'F': {'C'},
+    'G': {'C'}
+}
+
+dfs(graph, 'A')
